@@ -3,6 +3,7 @@ const router=express.Router()
 const authorController=require("../controllers/authorController")
 const blogController=require("../controllers/blogController")
 
+
 //1.
 router.post("/authors",authorController.createAuthor)
 
@@ -11,16 +12,6 @@ router.post("/blogs",blogController.createBlog)
 
 //3.
 router.get("/blogs",blogController.getBlog)
-
-
-
-
-
-
-
-
-
-// router.get("/blogs",blogController.Handler2)
 
 
 

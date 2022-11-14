@@ -22,7 +22,7 @@
           type: String,
           required: true
         },
-        subcategory: [String-[String]],
+        subcategory: [String],
         isDeleted: {
           type: Boolean,
           default: false
