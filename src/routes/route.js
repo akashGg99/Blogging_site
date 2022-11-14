@@ -3,14 +3,26 @@ const router=express.Router()
 const authorController=require("../controllers/authorController")
 const blogController=require("../controllers/blogController")
 
+//1.
+router.post("/authors",authorController.createAuthor)
 
-router.post("/authorpost",authorController.authorpost)
-router.post("/bloggingpost",authorController.Postbloagging)
+//2.
+router.post("/blogs",blogController.createBlog)
+
+//3.
+router.get("/blogs",blogController.getBlog)
 
 
 
-//Get APIs
-router.get("/blogs",blogController.Handler1)
 
-router.get("/blogs",blogController.Handler2)
 
+
+
+
+
+// router.get("/blogs",blogController.Handler2)
+
+
+
+
+module.exports=router;
