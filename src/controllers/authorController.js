@@ -14,7 +14,7 @@ try{
   const emailvalidation = await authorModel.find({email:emailInput})
         if(!emailvalidation)
         { 
-          return res.send({msg:"email already exists!"})
+          return res.status(404).send({msg:"email already exists!"})
         }
 
   let var1 = /[a-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}/
@@ -25,7 +25,7 @@ try{
   
 
   const savedata=await authorModel.create(data)
-  res.send({data:savedata})
+  res.status(201).send({data:savedata})
 }
 catch(error){
   res.status(500).send({msg: error.message})

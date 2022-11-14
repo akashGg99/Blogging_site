@@ -11,9 +11,9 @@ try{
     const authId = await authorModel.findById(data.authorId)
 
     if (authId){
-      const databogging = await blogModel.create(data)
+      const datablogging = await blogModel.create(data)
 
-      res.status(201).send({ data: databogging })
+      res.status(201).send({ data: datablogging })
     } else {
       res.status(400).send({ msg: "invalid authorId" })
     }
@@ -54,7 +54,7 @@ try{
     const result = await blogModel.find(obj1)
 
     if (result) {
-      res.status(200).send({ msg: result })
+      res.status(201).send({ msg: result })
     }
     else {
       res.status(404).send({ msg: "Nothing Found" }) }
