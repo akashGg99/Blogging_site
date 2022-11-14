@@ -1,10 +1,18 @@
 const { Router } = require("express");
-const authorMode=require('../Models/authorModel')
+const authorModel=require('../Models/authorModel')
 const blogModel=require('../Models/blogModel')
 
+
+
+const authorpost=async function(req,res){
+    const data=req.body
+    const savedata=await authorModel.create(data)
+    res.send({data:savedata})
+
+}
 const Postbloagging=async function(req,res){
     const data=req.body
-    const authId=await authorMode.findById(data.authId)
+    const authId=await authorModel.findById(data.authId)
 
     if(authId)
       {
@@ -19,5 +27,5 @@ const Postbloagging=async function(req,res){
 
 
 
-
+module.exports.authorpost=authorpost
 module.exports.Postbloagging=Postbloagging

@@ -1,6 +1,6 @@
 
-const authorModel = require("../Model/autherModels")
-const blogModel = require("../Model/blogModels")
+const authorModel = require("../Models/authorModel")
+const blogModel = require("../Models/blogModel")
 
 
 //api1..

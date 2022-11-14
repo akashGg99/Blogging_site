@@ -20,7 +20,7 @@ const authorSchema = new mongoose.Schema({
         lowercase: true
     },
     password: {
-        type: password,
+        type: String,
         required: true
     }
 }, {timestamps: true})

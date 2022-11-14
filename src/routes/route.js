@@ -4,7 +4,7 @@ const authorController=require("../controllers/authorController")
 const blogController=require("../controllers/blogController")
 
 
-
+router.post("/authorpost",authorController.authorpost)
 router.post("/bloggingpost",authorController.Postbloagging)
 
 
