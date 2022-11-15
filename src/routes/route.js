@@ -19,6 +19,8 @@ router.put("/blogs/:blogId", blogController.updateBlogs)
 //5
 router.delete("/blogs/:blogId", blogController.deleteBlogs)
 
+router.delete("/blogs",blogController.deletetsataus)
+
 
 
 

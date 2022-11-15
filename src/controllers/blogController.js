@@ -70,10 +70,10 @@ catch(error){
 
 
 const updateBlogs = async function(req, res){
-   const input = req.params.blogId
-  //  if(input != objectId){
-  //   return res.status(400).send({msg: "invalid blogId"})   // required validation
-  //  }
+   try{const input = req.params.blogId
+    if(!objectId.isValid(input)){
+    return res.status(400).send({msg: "invalid blogId"})   // required validation
+   }
    const{title, body, tags, subcategory} = req.body
    const blogId = await blogModel.find({_id:input, isDeleted: false})
    console.log("jsjkajk" + blogId)
@@ -85,6 +85,9 @@ const updateBlogs = async function(req, res){
       $set:{title: title, body: body}, $push:{tags: tags, subcategory: subcategory}, $set:{isPublished: true, publishedAt: new Date()}
     },{new: true})
     res.status(200).send({msg: updateEntry})
+  }catch(error){
+    res.send({msg:error.message})
+  }
 }
 
 
@@ -93,45 +96,59 @@ const updateBlogs = async function(req, res){
 
 
 const deleteBlogs = async function(req,res){
-  const input = req.params.blogId
-  const {category, authorId, tags, subcategory} = req.query
+  try{const input = req.params.blogId
 
-  let obj1 = {
-    _id: input,
-    isDeleted: false,
-    isPublished: false
-  }
-
-  if(category) {
-    obj1.category = category
-  }
-
-  if(authorId) {
-    obj1.authorId = authorId
-  }
-
-
-  if(tags) {
-    obj1.tags = tags
-  }
-
-  if(subcategory) {
-    obj1.subcategory = subcategory
-  }
-  const findData = await blogModel.findOneAndUpdate({obj1},
+  const findData = await blogModel.findOneAndUpdate({_id:input,isDeleted:false},
     {$set:{isDeleted: true, deletedAt: new Date()}},
     {new: true})
-    console.log(findData)
     if(!findData){
       return res.status(404).send({msg: "document is not found"})
     }
     res.status(200).send({msg: findData})
+  }catch(error){
+    res.send({msg:error.message})
+  }
 }
 
+const deletesataus=async function(req,res){
+    try{const {category, authorId, tags, subcategory} = req.query
+    const obj1={
+      isDeleted:false,
+      isPublished:false
+    }
+   
+    if(category) {
+      obj1.category = category
+    }
+  
+    if(authorId) {
+      obj1.authorId = authorId
+    }
+  
+  
+    if(tags) {
+      obj1.tags = tags
+    }
+  
+    if(subcategory) {
+      obj1.subcategory = subcategory
+    }
+    const getdata=await blogModel.find(obj1)
+   if(!getdata.length)
+    {
+       return res.status(404).send({msg:"document doesn't exist "})
+      }else{
+        res.status(200).send({getdata})
+      } 
+    }catch(error){
+      res.send({msg:error.message})
+    }  
+}
 
 
 module.exports.createBlog = createBlog
 module.exports.getBlog = getBlog
 module.exports.updateBlogs = updateBlogs
 module.exports.deleteBlogs = deleteBlogs
+module.exports.deletetsataus=deletesataus
 
