@@ -29,7 +29,7 @@
         },
         deletedAt: String,
         isPublished: {
-          type: String,
+          type: Boolean,
           default: false
         },
         publishedAt: String
