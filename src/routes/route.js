@@ -13,6 +13,12 @@ router.post("/blogs",blogController.createBlog)
 //3.
 router.get("/blogs",blogController.getBlog)
 
+//4.
+router.put("/blogs/:blogId", blogController.updateBlogs)
+
+//5
+router.delete("/blogs/:blogId", blogController.deleteBlogs)
+
 
 
 
