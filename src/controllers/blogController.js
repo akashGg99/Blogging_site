@@ -66,6 +66,10 @@ catch(error){
 }
 
 
+const updateBlogs = async function(req, res){
+  
+}
+
 
 module.exports.createBlog = createBlog
 module.exports.getBlog = getBlog
