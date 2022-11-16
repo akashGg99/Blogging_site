@@ -6,6 +6,7 @@ const blogModel = require("../Models/blogModel")
 
 const objectId = mongoose.Types.ObjectId
 
+
 //2.
 const createBlog = async function (req, res) {
   try {
@@ -25,6 +26,7 @@ const createBlog = async function (req, res) {
     res.status(500).send({ msg: error.message })
   }
 }
+
 
 
 //3.
@@ -64,31 +66,35 @@ const getBlog = async function (req, res) {
       res.status(404).send({ msg: "Nothing Found" })
     }
   }
+
   catch (error) {
     res.status(500).send({ msg: error.message })
   }
 }
 
+
+
 //4.
 const updateBlogs = async function (req, res) {
   try {
-    const input = req.params.blogId
-    if (!objectId.isValid(input)) {
-      return res.status(404).send({ msg: "invalid blogId" })   // required validation
+      const input = req.params.blogId
+      if (!objectId.isValid(input)) {
+        return res.status(404).send({ msg: "invalid blogId" })   // required validation
+      }
+      const { title, body, tags, subcategory } = req.body
+      const blogId = await blogModel.find({ _id: input, isDeleted: false })
+      if (!blogId) {
+        res.status(404).send({ msg: "blogId not found" })
+      }
+      const updateEntry = await blogModel.findByIdAndUpdate({ _id: input, isPublished: false },
+        {
+          $set: { title: title, body: body }, $push: { tags: tags, subcategory: subcategory }, $set: { isPublished: true, publishedAt: new Date() }
+        }, { new: true })
+      res.status(200).send({ msg: updateEntry })
     }
-    const { title, body, tags, subcategory } = req.body
-    const blogId = await blogModel.find({ _id: input, isDeleted: false })
-    if (!blogId) {
-      res.status(404).send({ msg: "blogId not found" })
+    catch (error) {
+      res.status(500).send({ msg: error.message })
     }
-    const updateEntry = await blogModel.findByIdAndUpdate({ _id: input, isPublished: false },
-      {
-        $set: { title: title, body: body }, $push: { tags: tags, subcategory: subcategory }, $set: { isPublished: true, publishedAt: new Date() }
-      }, { new: true })
-    res.status(200).send({ msg: updateEntry })
-  } catch (error) {
-    res.status(500).send({ msg: error.message })
-  }
 }
 
 //5.
@@ -103,7 +109,9 @@ const deleteBlogs = async function (req, res) {
       return res.status(404).send({ msg: "document is not found" })
     }
     res.status(200).send({ msg: findData })
-  } catch (error) {
+  }
+
+  catch (error) {
     res.status(500).send({ msg: error.message })
   }
 }
@@ -139,7 +147,9 @@ const deletesataus = async function (req, res) {
     } else {
       res.status(200).send({ getdata })
     }
-  } catch (error) {
+  } 
+  
+  catch (error) {
     res.status(500).send({ msg: error.message })
   }
 }

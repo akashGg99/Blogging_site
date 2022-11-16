@@ -2,28 +2,34 @@ const express=require("express")
 const router=express.Router()
 const authorController=require("../controllers/authorController")
 const blogController=require("../controllers/blogController")
+const middleware= require('../middlewares/authenticationMW')
 
 
 //1.
 router.post("/authors",authorController.createAuthor)
 
 //2.
-router.post("/blogs",blogController.createBlog)
+router.post("/blogs", middleware.authenticate, blogController.createBlog)
 
 //3.
-router.get("/blogs",blogController.getBlog)
+router.get("/blogs", middleware.authenticate, blogController.getBlog)
+
 
 //4.
-router.put("/blogs/:blogId", blogController.updateBlogs)
+router.put("/blogs/:blogId", middleware.authenticate, middleware.authorization, blogController.updateBlogs)
 
 //5
-router.delete("/blogs/:blogId", blogController.deleteBlogs)
+router.delete("/blogs/:blogId", middleware.authenticate, middleware.authorization, blogController.deleteBlogs)
 
 //6
-router.delete("/blogs",blogController.deletetsataus)
+router.delete("/blogs", middleware.authenticate, middleware.authorization, blogController.deletetsataus)
 
-//7
+
+
+
+//7 token generated
 router.post("/login",authorController.loginAuthor)
+
 
 
 
