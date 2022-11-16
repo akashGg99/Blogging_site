@@ -11,19 +11,31 @@ const authenticate = function (req, res, next) {
             res.status(400).send({ msg: "Please set x-api-key header" })
         }
 
-        let decodedToken = jwt.verify(token, "Project1-key") //token validity pending. galat token ka error trow karna hai               
+         jwt.verify(token, "Project1-key",(err,decode) =>{ 
 
-        if (!decodedToken) {
-            res.status(400).send({ msg: "Enter valid token" })
-        }
+        if(err){
+            return res.status(400).send({status: false, msg:"Incorrect Token"}) 
+        } 
+        (decode==true)
+          next()
 
-        next()
+        } )
+          
+       
+        // if (!decodedToken) {
+        //     res.status(400).send({ msg: "Enter valid token" })
+        // }
+
+       
     }
 
     catch (error) {
         res.status(500).send({ msg: "Authentication failure", msg2: error.message })
     }
 }
+
+
+
 
 
 const authorization = async function (req, res, next) {
@@ -51,7 +63,7 @@ const authorization = async function (req, res, next) {
             next()
         }
     }
-    
+
     catch (error) {
         res.status(500).send({ msg: "Authentication failure", msg2: error.message })
     }

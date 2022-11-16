@@ -20,7 +20,8 @@ const createAuthor=async function(req,res){
     }
 
 
-    let var1 = /[a-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}/
+    let var1 = /[a-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,3}/           //2,3 for .in , .com
+
     if(!var1.test(emailInput)){
     return res.status(400).send({msg:"Input valid Email"})
     }

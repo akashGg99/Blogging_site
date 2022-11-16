@@ -65,6 +65,7 @@ const getBlog = async function (req, res) {
     else {
       res.status(404).send({ msg: "Nothing Found" })
     }
+  
   }
 
   catch (error) {

@@ -158,3 +158,14 @@ Note: Create a group database and use the same database in connection string by 
 
 
 /[a-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}/
+
+
+
+/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+
+
+# EDGE CASES
+author with same email id. 
+schema handling will give catch 500, not good
+
