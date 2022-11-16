@@ -22,6 +22,8 @@ router.delete("/blogs/:blogId", blogController.deleteBlogs)
 //6
 router.delete("/blogs",blogController.deletetsataus)
 
+//7
+router.post("/login",authorController.loginAuthor)
 
 
 

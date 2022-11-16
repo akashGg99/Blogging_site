@@ -35,8 +35,24 @@ catch(error){
 }
 
 
+const loginAuthor=async function(req,res){
+  const input=req.body
+  const validateInput=await authorModel.find(input)
+  if(!validateInput){
+    return res.status(404).send({msg:"email or password is not valid"})
+  }
+  const token=jwt.sign({
+   authorId:validateInput._id
+  },"Project1 key")
+  res.setHeader("x-api-key",token)
+  res.status(201).send({token:token})
+
+
+}
+
 
 module.exports.createAuthor=createAuthor
+module.exports.loginAuthor=loginAuthor
 
 
 
