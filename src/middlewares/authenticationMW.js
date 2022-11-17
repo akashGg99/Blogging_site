@@ -12,7 +12,6 @@ const authenticate = function (req, res, next) {
         }
 
          jwt.verify(token, "Project1-key",(err,decode) =>{ 
-
         if(err){
             return res.status(400).send({status: false, msg:"Incorrect Token"}) 
         } 
@@ -40,6 +39,7 @@ const authenticate = function (req, res, next) {
 
 const authorization = async function (req, res, next) {
     try {
+       
         const token = req.headers["x-api-key"]
         const blogId = req.params.blogId
 
@@ -51,6 +51,7 @@ const authorization = async function (req, res, next) {
         if (!decodedToken) {
             res.status(400).send({ msg: "Enter valid token" })
         }
+        
 
 
 

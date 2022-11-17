@@ -11,7 +11,16 @@ const objectId = mongoose.Types.ObjectId
 const createBlog = async function (req, res) {
   try {
     const data = req.body
-
+    if(data.title==""){
+      return res.status(400).send({msg:"please enter title"})
+    }
+    if(data.body==""){
+      return res.status(400).send({msg:"please enter data in body"})
+    }
+    if(data.authId=="")
+    {
+      return res.status(400).send({msg:"please enter authorid"})
+    }
     const authId = await authorModel.findById(data.authorId)
 
     if (authId) {
@@ -41,22 +50,34 @@ const getBlog = async function (req, res) {
 
     if (authorId) {
       obj1.authorId = authorId
+      if(!(objectId.isValid(obj1.authId)))
+      {
+        return res.status(400).send({msg:"please check your authorId"})
+      }
     }
 
     if (category) {
       obj1.category = category
+      if(obj1.category=="")
+      {
+        return res.status(400).send({mag:"please eneter category "})
+      }
     }
 
     if (tags) {
       obj1.tags = tags
+      if(obj1.tags=="")
+      {
+        return res.status(400).send({mag:"please eneter tags "})
+      }
     }
-
     if (subcategory) {
       obj1.subcategory = subcategory
+      if(obj1.subcategory=="")
+      {
+        return res.status(400).send({mag:"please eneter subcategory "})
+      }
     }
-
-    // console.log(obj1)
-
     const result = await blogModel.find(obj1)
 
     if (result) {
@@ -66,9 +87,7 @@ const getBlog = async function (req, res) {
       res.status(404).send({ msg: "Nothing Found" })
     }
   
-  }
-
-  catch (error) {
+  }catch (error) {
     res.status(500).send({ msg: error.message })
   }
 }
@@ -83,6 +102,7 @@ const updateBlogs = async function (req, res) {
         return res.status(404).send({ msg: "invalid blogId" })   // required validation
       }
       const { title, body, tags, subcategory } = req.body
+
       const blogId = await blogModel.find({ _id: input, isDeleted: false })
       if (!blogId) {
         res.status(404).send({ msg: "blogId not found" })
@@ -102,7 +122,10 @@ const updateBlogs = async function (req, res) {
 const deleteBlogs = async function (req, res) {
   try {
     const input = req.params.blogId
-
+    if(!objectId.isValid(input))
+    {
+      return res.status(404).send({ msg: "invalid blogId" })
+    }
     const findData = await blogModel.findOneAndUpdate({ _id: input, isDeleted: false },
       { $set: { isDeleted: true, deletedAt: new Date() } },
       { new: true })
