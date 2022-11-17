@@ -68,7 +68,8 @@ example of a query url: blogs?filtername=filtervalue&f2=fv2
 5. DELETE /blogs/:blogId
 -Check if the blogId exists( and is not deleted). If it does, mark it deleted and return an HTTP status 200 without any response body.
 -If the blog document doesn't exist then return an HTTP status of 404 with a body like this
--DELETE /blogs?queryParams
+
+6. DELETE /blogs?queryParams
 -Delete blog documents by category, authorid, tag name, subcategory name, unpublished
 -If the blog document doesn't exist then return an HTTP status of 404 with a body like this
 
@@ -79,7 +80,7 @@ example of a query url: blogs?filtername=filtervalue&f2=fv2
 # Phase II
 Add authentication and authroisation feature
 
-6. POST /login
+7. POST /login
 -Allow an author to login with their email and password. On a successful login attempt return a JWT token contatining the authorId in response body like this
 -If the credentials are incorrect return a suitable error message with a valid HTTP status code
 

@@ -1,8 +1,6 @@
+
 const jwt = require('jsonwebtoken')
-const authorModel = require('../Models/authorModel')
 const blogModel = require('../Models/blogModel')
-const mongoose=require('mongoose')
-const objectId = mongoose.Types.ObjectId
 
 
 const authenticate = function (req, res, next) {
@@ -21,15 +19,7 @@ const authenticate = function (req, res, next) {
           next()
 
         } )
-          
-       
-        // if (!decodedToken) {
-        //     res.status(400).send({ msg: "Enter valid token" })
-        // }
-
-       
     }
-
     catch (error) {
         res.status(500).send({ msg: "Authentication failure", msg2: error.message })
     }
@@ -37,14 +27,10 @@ const authenticate = function (req, res, next) {
 
 
 
-
-
 const authorization = async function (req, res, next) {
     try {
-       
         const token = req.headers["x-api-key"]
         const blogId = req.params.blogId
-  
 
         if (!token) {
             res.status(400).send({ msg: "Please set x-api-key header" })
@@ -53,12 +39,8 @@ const authorization = async function (req, res, next) {
         if (!decodedToken) {
             res.status(400).send({ msg: "Enter valid token" })
         }
-        
-
-
 
         let result = await blogModel.findById(blogId)
-
         if (decodedToken.authorId !== result.authorId.toString()) {
             res.status(401).send({ msg: "User Not authorised" })
         }
@@ -66,7 +48,6 @@ const authorization = async function (req, res, next) {
             next()
         }
     }
-
     catch (error) {
         res.status(500).send({ msg: "Authentication failure", msg2: error.message })
     }
