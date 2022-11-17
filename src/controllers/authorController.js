@@ -24,9 +24,11 @@ const createAuthor=async function(req,res){
     if(data.lname.length==0) {
      return res.status(400).send({msg:"pleas enter your lname"})
     }
-    if(data.title.length==0 && !(data.title.includes("Mr","Mrs","Miss"))) {
+
+    if(data.title.length==0 || !(data.title.includes("Mr","Mrs","Miss"))) {
       return res.status(400).send({msg:"pleas enter from among its['Mr','Mrs','Miss']"})
     }
+
     if(data.password.length==0) {
       return res.status(400).send({msg:"pleas enter password"})
     }
@@ -101,3 +103,30 @@ const loginAuthor = async function(req,res){
 
 module.exports.createAuthor=createAuthor
 module.exports.loginAuthor=loginAuthor
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// empty =  true   ||  true = true  ok
+// mr   =  false   ||  true =  true ok  
+// Mr   =   false  ||  false  = false ok
+// if(data.title.length==0 || !(data.title.includes("Mr","Mrs","Miss"))) {
+//   return res.status(400).send({msg:"pleas enter from among its['Mr','Mrs','Miss']"})
+// }
