@@ -22,7 +22,7 @@ router.put("/blogs/:blogId", middleware.authenticate, middleware.authorization, 
 router.delete("/blogs/:blogId", middleware.authenticate, middleware.authorization, blogController.deleteBlogs)
 
 //6
-router.delete("/blogs", middleware.authenticate, middleware.authorization, blogController.deletetsataus)
+router.delete("/blogs",middleware.authenticate, middleware.authorization,blogController.deletetsataus)
 
 
 
@@ -30,7 +30,7 @@ router.delete("/blogs", middleware.authenticate, middleware.authorization, blogC
 //7 token generated
 router.post("/login",authorController.loginAuthor)
 
-
+router.all
 
 
 module.exports=router;

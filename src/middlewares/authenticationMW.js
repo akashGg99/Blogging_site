@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const authorModel = require('../Models/authorModel')
 const blogModel = require('../Models/blogModel')
+const mongoose=require('mongoose')
+const objectId = mongoose.Types.ObjectId
 
 
 const authenticate = function (req, res, next) {
@@ -42,7 +44,7 @@ const authorization = async function (req, res, next) {
        
         const token = req.headers["x-api-key"]
         const blogId = req.params.blogId
-
+  
 
         if (!token) {
             res.status(400).send({ msg: "Please set x-api-key header" })
