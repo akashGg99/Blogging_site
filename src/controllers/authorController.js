@@ -12,7 +12,7 @@ const createAuthor=async function(req,res){
     const data=req.body
     const emailInput=req.body.email
 
-    if(data.fname.length==0 || (typeof data.fname != typeof "hjjj")){  // (typeof data.fname != String) not working??? 
+    if(data.fname.length==0 || (typeof data.fname !="string")){  // (typeof data.fname != String) not working??? 
       return res.status(400).send({msg:"please enter your Fname properly"})
     }
     if(data.lname.length==0) {

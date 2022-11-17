@@ -53,36 +53,25 @@ const getBlog = async function (req, res) {
       isPublished: true,
     }
 
-    if (authorId) {
-      obj1.authorId = authorId
-      if(!(objectId.isValid(obj1.authId)))
-      {
-        return res.status(400).send({msg:"please check your authorId"})
+    if (authorId.length==0 ||!(objectId.isValid(authorId))) {
+       return res.status(400).send({msg:"please enter authorid properly"})
       }
-    }
+      obj1.authId=authorId
 
-    if (category) {
-      obj1.category = category
-      if(obj1.category=="")
-      {
+       if (category.length==0) {
         return res.status(400).send({mag:"please eneter category "})
-      }
-    }
+        }obj1.category = category
 
-    if (tags) {
-      obj1.tags = tags
-      if(obj1.tags=="")
-      {
-        return res.status(400).send({mag:"please eneter tags "})
+    if (tags.length==0) {
+      return res.status(400).send({mag:"please eneter tags "})
       }
-    }
-    if (subcategory) {
+       obj1.tags = tags
+
+    if (subcategory.length==0) {
+       return res.status(400).send({mag:"please eneter subcategory "})
+      }
       obj1.subcategory = subcategory
-      if(obj1.subcategory=="")
-      {
-        return res.status(400).send({mag:"please eneter subcategory "})
-      }
-    }
+
     const result = await blogModel.find(obj1)
 
     if (result) {
@@ -160,22 +149,24 @@ const deletesataus = async function (req, res) {
       isPublished: false
     }
 
-    if (category) {
-      obj1.category = category
-    }
+    if (category.length==0){
+        return res.status(400).send({msg:"please enter category"})
+       }
+       obj1.category = category
 
-    if (authorId) {
-      obj1.authorId = authorId
-    }
+    if (authorId.length==0||!(objectId.isValid(authorId))) {
+        return res.status(400).send({msg:"please enter authorid properly"})
+      }
+       obj1.authorId = authorId
 
+    if (tags.length==0) {
+      return res.status(400).send({msg:"please enter tags"})
+    }obj1.tags = tags
 
-    if (tags) {
-      obj1.tags = tags
-    }
-
-    if (subcategory) {
-      obj1.subcategory = subcategory
-    }
+    if (subcategory.length) {
+      return res.status(400).send({msg:"please enter tags"})
+    }obj1.subcategory = subcategory
+    
     const getdata = await blogModel.find(obj1)
     if (!getdata.length) {
       return res.status(404).send({ msg: "document doesn't exist " })
