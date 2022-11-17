@@ -11,15 +11,20 @@ const objectId = mongoose.Types.ObjectId
 const createBlog = async function (req, res) {
   try {
     const data = req.body
-    if(data.title==""){
+    if(data.title.length==0){
       return res.status(400).send({msg:"please enter title"})
     }
-    if(data.body==""){
-      return res.status(400).send({msg:"please enter data in body"})
+    if(data.body.length==0){
+      return res.status(400).send({msg:"please enter data"})
     }
-    if(data.authId=="")
-    {
+    if(data.authorId.length==0){
       return res.status(400).send({msg:"please enter authorid"})
+    }
+    if(!objectId.isValid(data.authorId)){
+      return res.status(400).send({msg: "please enter correct authorId"})
+    }
+    if(data.category.length==0){
+      return res.status(400).send({msg:"please enter category"})   // also check the data type = string (tags)
     }
     const authId = await authorModel.findById(data.authorId)
 
@@ -27,7 +32,7 @@ const createBlog = async function (req, res) {
       const datablogging = await blogModel.create(data)
 
       res.status(201).send({ data: datablogging })
-    } else {
+    }else{
       res.status(400).send({ msg: "invalid authorId" })
     }
   }
@@ -98,20 +103,26 @@ const getBlog = async function (req, res) {
 const updateBlogs = async function (req, res) {
   try {
       const input = req.params.blogId
+      if(input.length==0){
+        return res.status(400).send({msg:"please enter blogId in params"})
+      }
       if (!objectId.isValid(input)) {
         return res.status(404).send({ msg: "invalid blogId" })   // required validation
       }
       const { title, body, tags, subcategory } = req.body
 
-      const blogId = await blogModel.find({ _id: input, isDeleted: false })
-      if (!blogId) {
-        res.status(404).send({ msg: "blogId not found" })
-      }
-      const updateEntry = await blogModel.findByIdAndUpdate({ _id: input, isPublished: false },
+      // const blogId = await blogModel.find({ _id: input, isDeleted: false })
+      // if (!blogId) {
+      //   res.status(404).send({ msg: "blogId not found" })
+      // }
+      const updateEntry = await blogModel.findByIdAndUpdate({ _id: input, isDeleted: false, isPublished: false },
         {
           $set: { title: title, body: body }, $push: { tags: tags, subcategory: subcategory }, $set: { isPublished: true, publishedAt: new Date() }
         }, { new: true })
-      res.status(200).send({ msg: updateEntry })
+        if(!updateEntry){
+          return res.status(404).send({msg: "blog not found"})
+        }
+        res.status(200).send({ msg: updateEntry })
     }
     catch (error) {
       res.status(500).send({ msg: error.message })
