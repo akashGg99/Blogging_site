@@ -22,7 +22,7 @@ router.put("/blogs/:blogId", middleware.authenticate, middleware.authorization, 
 router.delete("/blogs/:blogId", middleware.authenticate, middleware.authorization, blogController.deleteBlogs)
 
 //6
-router.delete("/blogs",middleware.authenticate, middleware.authorization,blogController.deleteByQuery)
+router.delete("/blogs",middleware.authenticate, middleware.authorization, blogController.deleteByQuery)
 
 
 

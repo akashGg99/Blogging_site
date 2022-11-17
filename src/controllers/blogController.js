@@ -107,19 +107,27 @@ const updateBlogs = async function (req, res) {
     if (!objectId.isValid(input)) {
       return res.status(404).send({ msg: "invalid blogId" })   // required validation
     }
-
+    //input from body
     const { title, body, tags, subcategory } = req.body
 
-    // const blogId = await blogModel.find({ _id: input, isDeleted: false })
-    // if (!blogId) {
-    //   res.status(404).send({ msg: "blogId not found" })
-    // }
+    if (title.length == 0 || (typeof title != "string")) {
+      return res.status(400).send({ mag: "please enter proper title " })
+    }
+    if (body.length == 0 || (typeof body != "string")) {
+      return res.status(400).send({ mag: "please enter proper body " })
+    }
+    if (tags.length == 0 || (typeof tags != "string")) {
+      return res.status(400).send({ mag: "please enter proper tags " })
+    }
+    if (subcategory.length == 0 || (typeof subcategory != "string")) {
+      return res.status(400).send({ mag: "please enter subcategory " })
+    }
 
-    const updateEntry = await blogModel.findByIdAndUpdate( { _id: input, isDeleted: false, isPublished: false },
-      { $set: { title: title, body: body }, $push: { tags: tags, subcategory: subcategory }, $set: { isPublished: true, publishedAt: new Date() }}, 
+    const updateEntry = await blogModel.findByIdAndUpdate({ _id: input, isDeleted: false, isPublished: false },
+      { $set: { title: title, body: body,isPublished: true, publishedAt: new Date()  }, $push: { tags: tags, subcategory: subcategory } },
       { new: true })
 
-    if(!updateEntry) {
+    if (!updateEntry) {
       return res.status(404).send({ msg: "blog not found" })
     }
     res.status(200).send({ msg: updateEntry })
@@ -140,14 +148,14 @@ const deleteBlogs = async function (req, res) {
       return res.status(404).send({ msg: "invalid blogId" })
     }
 
-    const findData = await blogModel.findOneAndUpdate( {_id: input, isDeleted: false },
+    const findData = await blogModel.findOneAndUpdate({ _id: input, isDeleted: false },
       { $set: { isDeleted: true, deletedAt: new Date() } },
       { new: true })
 
     if (!findData) {
       return res.status(404).send({ msg: "document is not found" })
     }
-    res.status(200).send({ msg: "Document deleted"})
+    res.status(200).send({ msg: "Document deleted" })
   }
 
   catch (error) {
@@ -160,14 +168,16 @@ const deleteBlogs = async function (req, res) {
 const deleteByQuery = async function (req, res) {
   try {
     const { category, authorId, tags, subcategory } = req.query
+
     const obj1 = {
       isDeleted: false,
       isPublished: false
     }
 
-    if(category) {
-      obj1.category = category
-      return res.status(400).send({ msg: "please enter category" })
+    if (category) {
+      obj1.category = category;
+    
+      return res.status(400).send({ msg: "please enter category" }) 
     }
 
     if (authorId) {
@@ -178,19 +188,19 @@ const deleteByQuery = async function (req, res) {
     }
     if (tags) {
       obj1.tags = tags
-      if (obj1.tags.length == 0) {
+      if (obj1.tags.length == 0 || (typeof tags != "string")) {
         return res.status(400).send({ msg: "please enter tags" })
       }
     }
     if (subcategory) {
       obj1.subcategory = subcategory
-      if (obj1.subcategory.length) {
+      if (obj1.subcategory.length==0 || (typeof subcategory != "string")) {
         return res.status(400).send({ msg: "please enter subcategory" })
       }
     }
 
 
-    const findDeleteData = await blogModel.findOneAndUpdate( obj1,    
+    const findDeleteData = await blogModel.findOneAndUpdate(obj1,
       { $set: { isDeleted: true, deletedAt: new Date() } },
       { new: true })
 
