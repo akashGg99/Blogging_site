@@ -176,7 +176,7 @@ const deleteByQuery = async function (req, res) {
 
     if (category) {
       obj1.category = category;
-    
+    if(obj1.category==0||(typeof category != "string")))
       return res.status(400).send({ msg: "please enter category" }) 
     }
 
