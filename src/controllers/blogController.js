@@ -10,71 +10,69 @@ const objectId = mongoose.Types.ObjectId
 const createBlog = async function (req, res) {
   try {
     const data = req.body
-    const {title,body,authorId,category}= data
-    if(!title)
-    {
-     return res.status(404).send({msg:"  title is required"})
+
+    const { title, body, authorId, category } = data
+    if (!title) {
+      return res.status(404).send({ msg: "title is required" })
     }
-    if(!body)
-    {
-     return res.status(404).send({msg:"  body is required"})
+    if (!body) {
+      return res.status(404).send({ msg: "body is required" })
     }
-    if(!authorId)
-     {
-      return res.status(404).send({msg:"authorid is required"})
-     }
-     if(!category)
-     {
-      return res.status(404).send({msg:"category is required"})
-     }
-      if(data.title=="" || data.title){
+    if (!authorId) {
+      return res.status(404).send({ msg: "authorid is required" })
+    }
+    if (!category) {
+      return res.status(404).send({ msg: "category is required" })
+    }
+
+    if (data.title) {
       if (data.title.length == 0 || (typeof data.title != "string")) {
-      return res.status(400).send({ msg: "please enter title properly" })
+        return res.status(400).send({ msg: "please enter title properly" })
       }
-    }else{
-      return res.status(400).send({msg:"you missed enter title"}) 
+    } else{
+      return res.status(400).send({ msg: "you missed enter title" })
     }
 
-     if(data.body=="" ||data.body){
+    if (data.body) {
       if (data.body.length == 0 || (typeof data.body != "string")) {
-      return res.status(400).send({ msg: "please enter data" })
+        return res.status(400).send({ msg: "please enter data" })
       }
-    }else{
-      return res.status(400).send({msg:"you missed enter body"}) 
+    } else {
+      return res.status(400).send({ msg: "you missed enter body" })
     }
 
-     if(data.authorId=="" ||data.authorId){
-       if (data.authorId.length == 0 || (typeof data.authorId != "string")) {
-         return res.status(400).send({ msg: "please enter authorid" })
-       }
-     }else{
-      return res.status(400).send({msg:"you missed enter authorId"}) 
+    if (data.authorId) {
+      if (data.authorId.length == 0 || (typeof data.authorId != "string")) {
+        return res.status(400).send({ msg: "please enter authorid" })
+      }
+    } else {
+      return res.status(400).send({ msg: "you missed enter authorId" })
     }
 
     if (!objectId.isValid(data.authorId)) {
-      return res.status(400).send({ msg: "please enter correct authorId" })
+      return res.status(400).send({ msg: "please enter valid authorId" })
     }
 
-    if(data.category=="" ||data.category){
+    if (data.category) {
       if (data.category.length == 0 || (typeof data.category != "string")) {
-       return res.status(400).send({ msg: "please enter category" })  
+        return res.status(400).send({ msg: "please enter category" })
       }
-     }else{
-      return res.status(400).send({msg:"you missed enter category"}) 
+    } else {
+      return res.status(400).send({ msg: "you missed enter category" })
     }
 
-     if(data.isPublished=="" || data.isPublished)
-     {
-      if(data.isPublished.length==0 || typeof data.isPublished!="boolean")
-      {
-        return res.status(400).send({msg:"please enter properly isPusblished"})
-      }else if(data.isPublished==true){
-          data.publishedAt=publishedAt=new Date()
+    if (data.isPublished) {
+      if (data.isPublished.length == 0 || typeof data.isPublished != "boolean") {
+        return res.status(400).send({ msg: "please enter properly isPusblished" })
+      } else if (data.isPublished == true) {
+        data.publishedAt = publishedAt = new Date()
       }
-     }
+    }
 
     const authId = await authorModel.findById(data.authorId)
-    if (authId) {
+
+    if (authId) 
+    {
       const datablogging = await blogModel.create(data)
       res.status(201).send({ data: datablogging })
     }
@@ -101,28 +99,27 @@ const getBlog = async function (req, res) {
     }
 
     //Adding content to above object for DB call
-    if (authorId=="" || authorId) {
+    if (authorId) {
       obj1.authId = authorId
-      if (authorId.length==0 || !objectId.isValid(authorId)) {
+      if (authorId.length == 0 || !objectId.isValid(authorId)) {
         return res.status(400).send({ msg: "please enter authorid properly" })
       }
     }
-    if (category=="" || category) {
+    if (category) {
       obj1.category = category
-    if (obj1.category.length==0 || typeof category != "string") {
+      if (obj1.category.length == 0 || typeof category != "string") {
         return res.status(400).send({ mag: "please eneter category " })
       }
     }
-    if (tags==""|| tags) {
+    if (tags) {
       obj1.tags = tags
       if (tags.length == 0 || typeof tags != "string") {
         return res.status(400).send({ mag: "please eneter tags " })
       }
     }
-    if (subcategory || subcategory=="") {
+    if (subcategory) {
       obj1.subcategory = subcategory
-      if (subcategory.length == 0 || typeof subcategory != "string")
-       {
+      if (subcategory.length == 0 || typeof subcategory != "string") {
         return res.status(400).send({ mag: "please eneter subcategory " })
       }
     }
@@ -136,8 +133,8 @@ const getBlog = async function (req, res) {
       res.status(404).send({ msg: "Nothing Found" })
     }
 
-  }   
-catch (error) {
+  }
+  catch (error) {
     res.status(500).send({ msg: error.message })
   }
 }
@@ -148,36 +145,39 @@ catch (error) {
 const updateBlogs = async function (req, res) {
   try {
     const input = req.params.blogId
-    if (input==""||input) {
-      if(input.length==0 || !objectId.isValid(input))
-      return res.status(400).send({ msg: "please enter blogId  properly in params" })
-    }else{
-      return res.status(400).send({msg:"you missed enter blogId in params"})
+
+    if (input) {
+      if (input.length == 0 || !objectId.isValid(input))
+        return res.status(400).send({ msg: "please enter blogId  properly in params" })
+    } else {
+      return res.status(400).send({ msg: "you missed enter blogId in params" })
     }
 
     const { title, body, tags, subcategory } = req.body
-     if(title || title==""){
-    if (!title.length==0 || (typeof title != "string")) {
-      return res.status(400).send({ mag: "please enter proper title " })
+
+    if (title) {
+      if (!title.length == 0 || (typeof title != "string")) {
+        return res.status(400).send({ mag: "please enter proper title " })
+      }
     }
-  }
-  if(body || body==""){
-    if (!body || (typeof body != "string")) {
-      return res.status(400).send({ mag: "please enter proper body " })
+    if (body) {
+      if (!body || (typeof body != "string")) {
+        return res.status(400).send({ mag: "please enter proper body " })
+      }
     }
-  }
-    if(tags ||tags==""){
-    if (tags.length==0|| (typeof tags != "string")) {
-      return res.status(400).send({ mag: "please enter proper tags " })
+    if (tags) {
+      if (tags.length == 0 || (typeof tags != "string")) {
+        return res.status(400).send({ mag: "please enter proper tags " })
+      }
     }
-  }
-  if(subcategory || subcategory==""){
-    if (!subcategory || (typeof subcategory != "string")) {
-      return res.status(400).send({ mag: "please enter subcategory " })
+    if (subcategory) {
+      if (!subcategory || (typeof subcategory != "string")) {
+        return res.status(400).send({ mag: "please enter subcategory " })
+      }
     }
-  }
+
     const updateEntry = await blogModel.findByIdAndUpdate({ _id: input, isDeleted: false, isPublished: false },
-      { $set: { title: title, body: body,isPublished: true, publishedAt: new Date()  }, $push: { tags: tags, subcategory: subcategory } },
+      { $set: { title: title, body: body, isPublished: true, publishedAt: new Date() }, $push: { tags: tags, subcategory: subcategory } },
       { new: true })
 
     if (!updateEntry) {
@@ -196,14 +196,14 @@ const updateBlogs = async function (req, res) {
 const deleteBlogs = async function (req, res) {
   try {
     const input = req.params.blogId
-    
-    if (input==""||input) {
-      if(input.length==0 || !objectId.isValid(input))
-      return res.status(400).send({ msg: "please enter blogId  properly in params" })
-    }else{
-      return res.status(400).send({msg:"you missed enter blogId in params"})
+
+    if (input == "" || input) {
+      if (input.length == 0 || !objectId.isValid(input))
+        return res.status(400).send({ msg: "please enter blogId  properly in params" })
+    } else {
+      return res.status(400).send({ msg: "you missed enter blogId in params" })
     }
-    
+
 
     const findData = await blogModel.findOneAndUpdate({ _id: input, isDeleted: false },
       { $set: { isDeleted: true, deletedAt: new Date() } },
@@ -224,47 +224,49 @@ const deleteBlogs = async function (req, res) {
 //6.
 const deleteByQuery = async function (req, res) {
   try {
+    
     const obj1 = {
       isDeleted: false,
       isPublished: false,
-     }
-    const {category,authorId,tags,subcategory}=req.query
-
-    if (category=="" ||category) {
-      obj1.category = category;
-    if(obj1.category==0||(typeof category != "string"))
-      return res.status(400).send({ msg: "please enter category" }) 
     }
 
-    if (authorId=="" || authorId) {
+    const { category, authorId, tags, subcategory } = req.query
+
+    if (category) {
+      obj1.category = category;
+      if (obj1.category == 0 || (typeof category != "string"))
+        return res.status(400).send({ msg: "please enter category" })
+    }
+
+    if (authorId) {
       obj1.authorId = authorId
       if (obj1.authorId.length == 0 || !(objectId.isValid(obj1.authorId))) {
         return res.status(400).send({ msg: "please enter authorid properly" })
       }
     }
-    if (tags=="" || tags) {
+    if (tags) {
       obj1.tags = tags
       if (obj1.tags.length == 0 || (typeof tags != "string")) {
         return res.status(400).send({ msg: "please enter tags" })
       }
     }
-    if (subcategory==""||subcategory) {
+    if (subcategory) {
       obj1.subcategory = subcategory
-      if (obj1.subcategory.length==0 || (typeof subcategory != "string")) {
+      if (obj1.subcategory.length == 0 || (typeof subcategory != "string")) {
         return res.status(400).send({ msg: "please enter subcategory" })
       }
     }
 
 
     const findDeleteData = await blogModel.findOneAndUpdate(obj1,
-      { $set:{ isDeleted: true, deletedAt: new Date() } },
+      { $set: { isDeleted: true, deletedAt: new Date() } },
       { new: true })
-      
-    if (!findDeleteData){
-      return res.status(404).send({ msg:"documnet is not found " })
-    } 
-     res.status(200).send({ msg:"Item Deleted"})
-  
+
+    if (!findDeleteData) {
+      return res.status(404).send({ msg: "documnet is not found " })
+    }
+    res.status(200).send({ msg: "Item Deleted" })
+
   } catch (error) {
     res.status(500).send({ msg: error.message })
   }

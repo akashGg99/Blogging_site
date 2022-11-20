@@ -14,7 +14,6 @@ router.post("/blogs", middleware.authenticate, blogController.createBlog)
 //3.
 router.get("/blogs", middleware.authenticate, blogController.getBlog)
 
-
 //4.
 router.put("/blogs/:blogId", middleware.authenticate, middleware.authorization, blogController.updateBlogs)
 
@@ -24,12 +23,10 @@ router.delete("/blogs/:blogId", middleware.authenticate, middleware.authorizatio
 //6
 router.delete("/blogs",middleware.authenticate, middleware.authorization, blogController.deleteByQuery)
 
-
-
-
 //7 token generated
 router.post("/login",authorController.loginAuthor)
 
+//Wrong path error handling
 router.all("/*", (req,res) => {res.status(404).send( {msg:"Enter correct address"} ) }   )
 
 

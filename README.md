@@ -6,7 +6,7 @@ Author Model
   title: {mandatory, enum[Mr, Mrs, Miss]}, 
   email: {mandatory, valid email, unique}, 
   password: {mandatory} 
-  }
+}
 
 Blogs Model
 { 
