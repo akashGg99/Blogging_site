@@ -1,7 +1,7 @@
-
 const jwt = require('jsonwebtoken')
+const { default: mongoose } = require('mongoose')
 const blogModel = require('../Models/blogModel')
-
+const objectId=mongoose.Types.ObjectId
 
 const authenticate = function (req, res, next) {
     try {
@@ -35,6 +35,13 @@ const authorization = async function (req, res, next) {
             isPublished: false
           }
         const blogId = req.params.blogId
+        // if (blogId==""||blogId) {
+        //   if(blogId.length==0 || !objectId.isValid(blogId))
+        //   return res.status(400).send({ msg: "please enter blogId  properly in params" })
+        // }else{
+        //   return res.status(400).send({msg:"you missed enter blogId in params"})
+        // }
+    
         const {authorId,tags,category,subcategory} = req.query
         if (category) {
             obj1.category = category;
@@ -65,50 +72,49 @@ const authorization = async function (req, res, next) {
         if (!token) {
             res.status(400).send({ msg: "Please set x-api-key header" })
         }
-        let decodedToken = jwt.verify(token, "Project1-key")     //token validity pending. how to??         
+        let decodedToken = jwt.verify(token, "Project1-key")             
         if (!decodedToken) {
             res.status(400).send({ msg: "Enter valid token" })
         }
-
-       
-        // if(!blogId){ res.status(404).send({msg: "enter blog id to be deleted"})}
-
-        // // //alternative to get blogs author id
-         if(!blogId){
-            
-            let result1 = await blogModel.find(obj1)
-            console.log(result1)
-            if(!result1.length){res.send("not found")}
-              //console.log(decodedToken.authorId)
-              //console.log(result.authorId.toString())
-            if (decodedToken.authorId != result1.authorId.toString()) {
-                res.status(401).send({ msg: "User Not authorised 2.." })
+        
+         if(blogId){
+            let result = await blogModel.findById(blogId)
+           
+              console.log(result)
+            if(!result){ res.status(404).send( {msg: "nothing found.."})}
+    
+             console.log(decodedToken.authorId)
+             console.log(result.authorId)
+    
+            if (decodedToken.authorId !== result.authorId.toString()) {
+                res.status(401).send({ msg: "User Not authorised" })
             }
             else {
                 next()
             }
+        
          }else{
 
-       
-        let result = await blogModel.findById(blogId)
-        // let result = await blogModel.findById({ _id:blogId, _id: inputfromQuery._id })
-          console.log(result)
-        if(!result){ res.status(404).send( {msg: "nothing found.."})}
-
-         console.log(decodedToken.authorId)
-         console.log(result.authorId)
-
-        if (decodedToken.authorId !== result.authorId.toString()) {
-            res.status(401).send({ msg: "User Not authorised" })
-        }
-        else {
+          let count=0
+          let result = await blogModel.find({obj1})
+          if(!result.length){res.send("not found")}
+            for(let i=0; i<result.length; i++)
+            {
+            if (decodedToken.authorId === result[i].authorId.toString()) {
+              count++
+               }
+            }
+            if(count==0)
+            {
+              return res.status(401).send({ msg: "User Not authorised" })
+            }
             next()
-        }
+     }
     }
-  }
     catch (error) {
-        res.status(500).send({ msg: "Authentication failure", msg2: error.message })
+        res.status(500).send({ msg: error.message })
     }
+    
 }
 
 

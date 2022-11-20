@@ -32,7 +32,10 @@
           type: Boolean,
           default: false
         },
-        publishedAt: String
+        publishedAt:{
+          type:Date,
+          
+        }
   
   },{ timestamps: true})
   
