@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const route = require('./routes/route.js');
@@ -9,7 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-mongoose.connect("mongodb+srv://modassar123:modassar1234@test.ahxnnau.mongodb.net/project-database", {
+mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true
 })
 .then( () => console.log("MongoDb is connected"))

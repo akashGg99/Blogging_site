@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken')
 const createAuthor = async function (req, res) {
   try {
     const data = req.body
-    
+
     const { fname, lname, title, email, password } = data
     if (!fname) return res.status(400).send({ status: false, msg: "fname is required" })
     if (!lname) return res.status(400).send({ status: false, msg: "lname is required" })
@@ -17,7 +17,7 @@ const createAuthor = async function (req, res) {
     //  console.log(data)
 
     if (data.fname) {
-      if (data.fname.trim().length == 0 || (typeof data.fname != "string")) {  
+      if (data.fname.trim().length == 0 || (typeof data.fname != "string")) {
         return res.status(400).send({ msg: "please enter your fname properly" })
       }
     }
@@ -67,7 +67,7 @@ const createAuthor = async function (req, res) {
 
 
 //Token generation
-const loginAuthor = async function(req, res) {
+const loginAuthor = async function (req, res) {
   try {
 
     const input = req.body
@@ -100,7 +100,7 @@ const loginAuthor = async function(req, res) {
     }
 
     let token = jwt.sign(
-      { authorId: validateInput._id.toString() },  "Project1-key" )
+      { authorId: validateInput._id.toString() }, "Project1-key", {expires:"1h"})
 
     // res.setHeader("x-api-key", token)
     res.status(201).send({ token: token })
